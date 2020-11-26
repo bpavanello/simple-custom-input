@@ -1,0 +1,54 @@
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <my-input value="Front end"></my-input>
+
+    <script>
+        class MyInput extends HTMLElement {
+
+            constructor() {
+                super();
+                this._value = '';
+                this.addEventListener('input', () => {
+                    this._updateValue();
+                    const changeEvt = new Event('change');
+                    this.dispatchEvent(changeEvt);
+                });
+            }
+            
+            connectedCallback () {
+                this.setAttribute('contentEditable', true);
+                if (this.hasAttribute('value')) {
+                    this.value = this.getAttribute('value');
+                    this._renderValue();
+                }
+            }
+
+            get value() {
+                return this._value;
+            }
+
+            set value(newValue) {
+                this._value = newValue;
+                this._renderValue();
+            }
+
+            _updateValue() {
+                this._value = this.innerHTML;
+                this.setAttribute('value', this.value);
+            }
+
+            _renderValue() {
+                this.innerHTML = this._value;
+            }
+
+        }
+
+        customElements.define('my-input', MyInput);
+    </script>
+</body>
+</html>
